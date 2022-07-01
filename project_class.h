@@ -37,6 +37,7 @@ public:
     void set_car_status(char, int);
     veh_inf get_car_status();
     void write();
+    std::string& get_name();
     friend void read_from_user_file(std::vector<User> &);
     static void set_no_of_users(unsigned int);
     static unsigned int get_no_of_users();
@@ -68,7 +69,7 @@ void User::get_data(){
 void User::validate_data(){
     int phone_length = log10(phone) + 1, d, m, y;
     bool e = false;
-    for(int i = 0; i < e_mail.size()-1; ++i){
+    for(int i = e_mail.size()-2; i >= 0; --i){
         if(e_mail[i] == '@'){
             e = true;
             break;
@@ -170,6 +171,9 @@ void User::set_no_of_users(unsigned int n){
 unsigned int User::get_no_of_users(){
     return users;
 }
+std::string& User::get_name(){
+    return user_name;
+}
 //-------------------------------------------------------------------------
 class Vehicle{ //abstract for deriving others
 protected:
@@ -267,7 +271,7 @@ void Travel::calculate_amount_due(){
 void Travel::display(){
     std::cout<<"\nVehicle name "<<vehicle_name<<" with id of "<<vehicle_id<<" of travel type "<<vehicle_type<<" with number "
     <<vehicle_number<<" and color "<<color<<", passenger capacity of "<<passenger_capacity;
-    std::cout<<"\nhas a base and extended rate of "<<base_rate<<" "<<extended_rate
+    std::cout<<"\nhas a base and extended rate of "<<base_rate<<", "<<extended_rate
     <<" and is currently booked by ";
     if(user_booked_id ==-1){
         std::cout<<"no user\n";
@@ -316,7 +320,7 @@ void Transport::calculate_amount_due(){
 void Transport::display(){
     std::cout<<"\nVehicle name "<<vehicle_name<<" with id of "<<vehicle_id<<" of transport type "<<vehicle_type<<" with number "
     <<vehicle_number<<" and color "<<color<<", having a maximum weight capacity of "<<weight_limit;
-    std::cout<<"\nhas a base and extended rate of "<<base_rate<<" "<<extended_rate
+    std::cout<<"\nhas a base and extended rate of "<<base_rate<<", "<<extended_rate
     <<" and is currently booked by ";
     if(user_booked_id ==-1){
         std::cout<<"no user\n";
