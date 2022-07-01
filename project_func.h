@@ -221,17 +221,26 @@ void search_vehicle(std::vector<Travel> &v, std::vector<Transport> &v2){
         return;
     }
     
-    for(iter(Travel) it = v.begin(); it != v.end(); ++it){
-        if(it->get_vehicle_id() == num){
-            it->display();
-            return;
-        }
+    // for(iter(Travel) it = v.begin(); it != v.end(); ++it){
+    //     if(it->get_vehicle_id() == num){
+    //         it->display();
+    //         return;
+    //     }
+    // }
+
+    int x = binary_search_for_vehicles(v, num);
+    if(x!=-1){
+        v[x].display();
     }
-    for(iter(Transport) it = v2.begin(); it != v2.end(); ++it){
-        if(it->get_vehicle_id() == num){
-            it->display();
-            return;
-        }
+    // for(iter(Transport) it = v2.begin(); it != v2.end(); ++it){
+    //     if(it->get_vehicle_id() == num){
+    //         it->display();
+    //         return;
+    //     }
+    // }
+    x = binary_search_for_vehicles(v2, num);
+    if(x!=-1){
+        v2[x].display();
     }
 }
 
@@ -317,7 +326,13 @@ void homepage(){
 }
 
 void user_menu(){
-    format_output("User Menu");
+    format_output("User Menu"); std::cout<<std::endl;
+    std::string name = std::string("Logged in as ") + current_user->get_name();
+    CONSOLE_SCREEN_BUFFER_INFO csbinfo;
+    if(GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbinfo))
+        std::cout<<std::setw(csbinfo.dwSize.X)<<std::right<<name;
+    else
+        std::cout<<std::setw(50)<<std::right<<name;
     std::cout<<"\n1 for Booking a car\n";
     std::cout<<"2 for Returning your car\n";
     std::cout<<"3 for Checking your booking or amount due\n";
@@ -348,6 +363,7 @@ void format_output(const char* output_string){
     std::cout<<std::setw(19)<<std::right<<output_string<<std::setw(10)<<'|'<<'\n';
     std::cout<<std::setw(50)<<std::right;
     for(int i = 0; i < 30; ++i) std::cout<<'-';
+    std::cout<<std::endl;
 }
 
 void display_all_vehicles(std::vector<Travel> &v1, std::vector<Transport> &v2){
@@ -399,4 +415,17 @@ void check_admin(){
         std::cout<<"\nWrong password, admin access is only for privelaged users, You have "
         <<3 - tries++<<" more tries remaining";
     }
+}
+
+template<typename T>
+int binary_search_for_vehicles(std::vector<T> &vec, int num){
+    int low = 0;
+    int high = vec.size()-1;
+    while(low <= high){
+        int mid = (low + high) / 2;
+        if(vec[mid].get_vehicle_id() == num) return mid;
+        else if(vec[mid].get_vehicle_id() < num) low = mid+1;
+        else high = mid-1;
+    }
+    return -1;
 }
