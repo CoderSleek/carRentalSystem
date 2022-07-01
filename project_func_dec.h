@@ -25,3 +25,5 @@ void write_all_user(std::vector<User> &v);
 
 template<typename T>
 void write_all_vehicles(std::vector<T> &, const std::string &);
+template<typename T>
+int binary_search_for_vehicles(std::vector<T> &, int);
